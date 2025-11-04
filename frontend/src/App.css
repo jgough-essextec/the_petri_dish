@@ -1,0 +1,25 @@
+.todo-item {
+  border-left: 2px solid #dee2e6;
+  padding-left: 15px;
+}
+
+.btn-group .btn {
+  margin-right: 5px;
+}
+
+.card {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.card-body {
+  padding: 1.25rem;
+}
+
+.container-fluid {
+  max-width: 1200px;
+}
+
+.text-decoration-line-through {
+  text-decoration: line-through;
+}
