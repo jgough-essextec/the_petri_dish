@@ -60,6 +60,10 @@ jobs:
         # Run pytest, emit JUnit XML and capture console output to a log file for debugging
         set -o pipefail
         pytest -v --tb=short --cov=. --cov-report=term-missing --junitxml=backend/pytest-results.xml 2>&1 | tee backend/pytest-output.log
+        EXIT_CODE=${PIPESTATUS[0]}
+        if [ $EXIT_CODE -ne 0 ]; then
+          exit $EXIT_CODE
+        fi
       env:
         # Ensure tests run in test environment
         PYTHONPATH: .
