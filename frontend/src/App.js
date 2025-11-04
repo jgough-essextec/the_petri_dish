@@ -149,9 +149,7 @@ function App() {
   };
 
   // Initialize
-  useEffect(() => {
-    fetchTodos(0);
-  }, []);
+  // NOTE: fetching is handled by the `currentView` effect below which runs on mount
 
   // View change handler
   useEffect(() => {
@@ -295,8 +293,9 @@ function App() {
                 
                 {/* Parent selection for hierarchy */}
                 <div className="mb-3">
-                  <label className="form-label">Add as sub-task of:</label>
+                  <label htmlFor="parent-select" className="form-label">Add as sub-task of:</label>
                   <select
+                    id="parent-select"
                     className="form-select"
                     value={selectedParentId || ''}
                     onChange={(e) => setSelectedParentId(e.target.value ? parseInt(e.target.value) : null)}
