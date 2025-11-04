@@ -57,7 +57,8 @@ jobs:
     - name: Run tests with pytest
       working-directory: ./backend
       run: |
-        pytest -v --tb=short --cov=. --cov-report=term-missing
+        # Run pytest and emit a JUnit XML report for artifact upload
+        pytest -v --tb=short --cov=. --cov-report=term-missing --junitxml=backend/pytest-results.xml
       env:
         # Ensure tests run in test environment
         PYTHONPATH: .
