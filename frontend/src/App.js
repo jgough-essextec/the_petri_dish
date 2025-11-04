@@ -74,7 +74,7 @@ function App() {
     if (newTodo.trim() === '') return;
     
     try {
-      const response = await axios.post(`${API_BASE_URL}/todos/`, {
+      await axios.post(`${API_BASE_URL}/todos/`, {
         title: newTodo,
         parent_id: selectedParentId
       });
