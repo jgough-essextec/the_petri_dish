@@ -413,7 +413,7 @@ class TestErrorHandling:
         # Test with invalid JSON in request body
         response = client.post(
             "/todos/",
-            data="invalid json",
+            content="invalid json",
             headers={"Content-Type": "application/json"}
         )
         assert response.status_code == 422

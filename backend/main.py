@@ -1,4 +1,28 @@
-from fastapi import FastAPI, HTTPException
+import sys
+
+# Workaround: prefer importing the maintained `python_multipart` module and
+# register it under the legacy name `multipart` so Starlette's import of
+# `multipart` doesn't trigger a PendingDeprecationWarning coming from the
+# python-multipart package. This keeps CI/test output clean while upstream
+# libraries are updated.
+try:
+    import python_multipart as _python_multipart
+    # If the `multipart` name isn't already in sys.modules, point it to the
+    # python_multipart module so later `import multipart` returns the same
+    # module.
+    sys.modules.setdefault('multipart', _python_multipart)
+except Exception:
+    # If python_multipart isn't installed, we'll continue and let the normal
+    # import path run (which may emit a deprecation warning).
+    pass
+
+# Import FastAPI while suppressing the specific PendingDeprecationWarning that
+# can be emitted by Starlette/python-multipart during import. This keeps the
+# application import-time output quiet without changing third-party packages.
+import warnings
+with warnings.catch_warnings():
+    warnings.filterwarnings('ignore', category=PendingDeprecationWarning)
+    from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, ConfigDict, field_validator
 from typing import List, Optional
 import sqlite3
@@ -143,8 +167,12 @@ async def update_todo(todo_id: int, todo_update: TodoUpdate):
             update_fields.append("completed = ?")
             values.append(todo_update.completed)
             if todo_update.completed:
+                # Store timestamps as ISO formatted strings instead of raw
+                # datetime objects. The sqlite3 default datetime adapter is
+                # deprecated on newer Pythons; using an ISO string avoids the
+                # deprecation and keeps the API consistent for clients/tests.
                 update_fields.append("completed_at = ?")
-                values.append(datetime.now())
+                values.append(datetime.now().isoformat())
             else:
                 update_fields.append("completed_at = NULL")
 
