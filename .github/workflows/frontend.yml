@@ -61,18 +61,18 @@ jobs:
       working-directory: ./frontend
       run: |
         # Run tests in CI mode with coverage
-        npm test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter
+        # Avoid custom test result processors that may not be installed in the environment.
+        npm test -- --coverage --watchAll=false
       env:
         CI: true
 
-    - name: Upload test results
-      uses: actions/upload-artifact@v5
+    - name: Upload coverage artifact
+      uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: jest-results-${{ matrix.node-version }}
+        name: jest-coverage-${{ matrix.node-version }}
         path: |
-          frontend/coverage/
-          frontend/test-report.xml
+          frontend/coverage/**
         retention-days: 30
 
     - name: Upload build artifacts
