@@ -36,8 +36,9 @@ jobs:
     - name: Run backend tests
       working-directory: ./backend
       run: |
-        # Run pytest and emit a JUnit XML report for artifact upload
-        pytest -v --tb=short --junitxml=backend/pytest-results.xml
+        # Run pytest, emit JUnit XML and capture console output to a log file for debugging
+        set -o pipefail
+        pytest -v --tb=short --junitxml=backend/pytest-results.xml 2>&1 | tee backend/pytest-output.log
       env:
         PYTHONPATH: .
 

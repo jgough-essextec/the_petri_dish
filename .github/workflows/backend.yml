@@ -57,18 +57,21 @@ jobs:
     - name: Run tests with pytest
       working-directory: ./backend
       run: |
-        # Run pytest and emit a JUnit XML report for artifact upload
-        pytest -v --tb=short --cov=. --cov-report=term-missing --junitxml=backend/pytest-results.xml
+        # Run pytest, emit JUnit XML and capture console output to a log file for debugging
+        set -o pipefail
+        pytest -v --tb=short --cov=. --cov-report=term-missing --junitxml=backend/pytest-results.xml 2>&1 | tee backend/pytest-output.log
       env:
         # Ensure tests run in test environment
         PYTHONPATH: .
 
-    - name: Upload test results
-      uses: actions/upload-artifact@v5
+    - name: Upload test results and logs
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: pytest-results-${{ matrix.python-version }}
-        path: backend/pytest-results.xml
+        path: |
+          backend/pytest-results.xml
+          backend/pytest-output.log
         retention-days: 30
 
   # Job to check if all tests passed (for branch protection rules)
