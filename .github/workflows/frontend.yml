@@ -66,7 +66,7 @@ jobs:
         CI: true
 
     - name: Upload test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: jest-results-${{ matrix.node-version }}
@@ -76,7 +76,7 @@ jobs:
         retention-days: 30
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: build-${{ matrix.node-version }}
         path: frontend/build/
