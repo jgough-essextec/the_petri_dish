@@ -1,0 +1,38 @@
+1. Get the application URLs by running these commands:
+
+{{- if .Values.routes.frontend.enabled }}
+  Frontend URL: 
+  https://{{ .Values.routes.frontend.host }}
+{{- end }}
+
+{{- if .Values.routes.backend.enabled }}
+  Backend API URL:
+  https://{{ .Values.routes.backend.host }}
+  
+  API Health Check:
+  https://{{ .Values.routes.backend.host }}/health
+{{- end }}
+
+2. Check the status of your deployment:
+  kubectl get pods -n {{ .Values.global.namespace }}
+
+3. To see the logs:
+  Backend logs:
+  kubectl logs -f deployment/{{ .Values.backend.name }} -n {{ .Values.global.namespace }}
+  
+  Frontend logs:
+  kubectl logs -f deployment/{{ .Values.frontend.name }} -n {{ .Values.global.namespace }}
+
+4. Database persistence:
+{{- if .Values.backend.persistence.enabled }}
+  ✓ SQLite database is persisted using a {{ .Values.backend.persistence.size }} PVC
+  PVC name: {{ .Values.backend.name }}-pvc
+{{- else }}
+  ⚠️  Database persistence is disabled - data will be lost on pod restart
+{{- end }}
+
+5. Resource usage:
+  Backend: {{ .Values.backend.deployment.resources.requests.memory }} memory, {{ .Values.backend.deployment.resources.requests.cpu }} CPU
+  Frontend: {{ .Values.frontend.deployment.resources.requests.memory }} memory, {{ .Values.frontend.deployment.resources.requests.cpu }} CPU
+
+Thank you for using {{ .Chart.Name }}!

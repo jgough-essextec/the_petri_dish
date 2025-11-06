@@ -22,6 +22,10 @@ def _running_under_pytest(env: dict[str, str], argv: Iterable[str]) -> bool:
         return True
     if "PYTEST_CURRENT_TEST" in env:
         return True
+    # If running inside GitHub Actions or other CI, enable the shim so CI runs
+    # are quiet while upstream packages are migrated.
+    if env.get("GITHUB_ACTIONS") == "true" or env.get("CI") == "true":
+        return True
     if any("pytest" in (str(a).lower()) for a in argv):
         return True
     if "pytest" in sys.modules:

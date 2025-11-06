@@ -113,11 +113,6 @@ init_db()
 async def root():
     return {"message": "Todo App API"}
 
-@app.get("/health")
-async def health_check():
-    return {"status": "healthy", "timestamp": datetime.now().isoformat()}
-
-
 @app.post("/todos/", response_model=Todo)
 async def create_todo(todo: TodoCreate):
     conn = get_db_connection()

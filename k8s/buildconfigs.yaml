@@ -1,0 +1,108 @@
+# Backend BuildConfig
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: todo-backend
+  namespace: todo-app
+  labels:
+    app: todo-backend
+    component: backend
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://github.com/jgough-essextec/the_petri_dish.git
+      ref: open-shift-build
+    contextDir: backend
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+  output:
+    to:
+      kind: ImageStreamTag
+      name: todo-backend:latest
+  triggers:
+    - type: ConfigChange
+    - type: GitHub
+      github:
+        secret: webhook-secret
+    - type: Generic
+      generic:
+        secret: webhook-secret
+  resources:
+    limits:
+      memory: 1Gi
+      cpu: 500m
+    requests:
+      memory: 512Mi
+      cpu: 250m
+
+---
+# Frontend BuildConfig  
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: todo-frontend
+  namespace: todo-app
+  labels:
+    app: todo-frontend
+    component: frontend
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://github.com/jgough-essextec/the_petri_dish.git
+      ref: open-shift-build
+    contextDir: frontend
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+  output:
+    to:
+      kind: ImageStreamTag
+      name: todo-frontend:latest
+  triggers:
+    - type: ConfigChange
+    - type: GitHub
+      github:
+        secret: webhook-secret
+    - type: Generic
+      generic:
+        secret: webhook-secret
+  resources:
+    limits:
+      memory: 2Gi
+      cpu: 1000m
+    requests:
+      memory: 1Gi
+      cpu: 500m
+
+---
+# Backend ImageStream
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: todo-backend
+  namespace: todo-app
+  labels:
+    app: todo-backend
+    component: backend
+spec:
+  lookupPolicy:
+    local: false
+
+---
+# Frontend ImageStream
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: todo-frontend
+  namespace: todo-app
+  labels:
+    app: todo-frontend
+    component: frontend
+spec:
+  lookupPolicy:
+    local: false

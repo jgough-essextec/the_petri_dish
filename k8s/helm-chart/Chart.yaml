@@ -1,0 +1,16 @@
+apiVersion: v2
+name: todo-app
+description: A full-stack Todo application with FastAPI backend and React frontend
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - todo
+  - fastapi
+  - react
+  - python
+  - javascript
+home: https://github.com/jgough-essextec/the_petri_dish
+maintainers:
+  - name: Jonathan Gough
+    email: jonathan@goughlab.com

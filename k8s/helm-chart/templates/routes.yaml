@@ -1,0 +1,59 @@
+{{- if .Values.routes.frontend.enabled }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Values.frontend.name }}-route
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.frontend.name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  host: {{ .Values.routes.frontend.host }}
+  to:
+    kind: Service
+    name: {{ .Values.frontend.name }}
+    weight: 100
+  port:
+    targetPort: http
+  {{- if .Values.routes.frontend.tls }}
+  tls:
+    termination: {{ .Values.routes.frontend.tls.termination }}
+    {{- if .Values.routes.frontend.tls.insecureEdgeTerminationPolicy }}
+    insecureEdgeTerminationPolicy: {{ .Values.routes.frontend.tls.insecureEdgeTerminationPolicy }}
+    {{- end }}
+  {{- end }}
+  wildcardPolicy: None
+---
+{{- end }}
+{{- if .Values.routes.backend.enabled }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Values.backend.name }}-route
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.backend.name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  host: {{ .Values.routes.backend.host }}
+  to:
+    kind: Service
+    name: {{ .Values.backend.name }}
+    weight: 100
+  port:
+    targetPort: http
+  {{- if .Values.routes.backend.tls }}
+  tls:
+    termination: {{ .Values.routes.backend.tls.termination }}
+    {{- if .Values.routes.backend.tls.insecureEdgeTerminationPolicy }}
+    insecureEdgeTerminationPolicy: {{ .Values.routes.backend.tls.insecureEdgeTerminationPolicy }}
+    {{- end }}
+  {{- end }}
+  wildcardPolicy: None
+{{- end }}
