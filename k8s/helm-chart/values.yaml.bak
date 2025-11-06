@@ -120,13 +120,12 @@ routes:
       termination: edge
 
 # Security Context
-# Security Context - OpenShift compatible
 securityContext:
   runAsNonRoot: true
-  # Let OpenShift assign user ID from allowed range
-  # runAsUser and runAsGroup will be set by SCC
+  runAsUser: 1001
+  runAsGroup: 1001
+  fsGroup: 1001
 
-# Pod Security Context - OpenShift compatible
+# Pod Security Context
 podSecurityContext:
-  # Let OpenShift SCC handle fsGroup assignment
-  # fsGroup will be set automatically
+  fsGroup: 1001

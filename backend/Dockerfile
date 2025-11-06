@@ -1,8 +1,5 @@
 FROM python:3.9-slim
 
-# Create non-root user for security
-RUN groupadd -r appuser && useradd -r -g appuser appuser
-
 # Set working directory
 WORKDIR /app
 
@@ -21,11 +18,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY main.py .
 COPY multipart.py .
 
-# Create directory for SQLite database with proper permissions
-RUN mkdir -p /app/data && chown -R appuser:appuser /app
-
-# Switch to non-root user
-USER appuser
+# Create directory for SQLite database with OpenShift-compatible permissions
+# OpenShift runs containers with random user IDs but always uses group 0 (root group)
+RUN mkdir -p /app/data && \
+    chmod -R g+rwx /app && \
+    chgrp -R 0 /app
 
 # Expose port
 EXPOSE 8000

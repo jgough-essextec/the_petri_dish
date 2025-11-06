@@ -20,22 +20,17 @@ RUN npm run build
 # Production stage
 FROM nginx:1.21-alpine
 
-# Create non-root user for security
-RUN addgroup -g 1001 appuser && adduser -S -u 1001 -G appuser appuser
-
 # Copy built React app to nginx html directory
 COPY --from=builder /app/build /usr/share/nginx/html
 
 # Copy custom nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Create directories with proper permissions
+# Create directories with OpenShift-compatible permissions
+# OpenShift runs containers with random user IDs but always uses group 0 (root group)
 RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx && \
-    chown -R appuser:appuser /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html && \
-    chmod -R 755 /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html
-
-# Switch to non-root user
-USER appuser
+    chmod -R g+rwx /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html && \
+    chgrp -R 0 /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html
 
 # Expose port 8080 (non-privileged port)
 EXPOSE 8080
