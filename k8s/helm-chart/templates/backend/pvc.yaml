@@ -4,11 +4,13 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ .Values.backend.name }}-pvc
   namespace: {{ .Values.global.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
   labels:
     app.kubernetes.io/name: {{ .Values.backend.name }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/component: backend
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: backend-storage
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   accessModes:

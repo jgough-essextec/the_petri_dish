@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: {{ .Values.frontend.name }}
   namespace: {{ .Values.global.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   labels:
     app.kubernetes.io/name: {{ .Values.frontend.name }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -37,6 +39,14 @@ spec:
         - name: {{ .name }}
           value: {{ .value | quote }}
         {{- end }}
+        startupProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.frontend.service.targetPort }}
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
         livenessProbe:
           {{- toYaml .Values.frontend.livenessProbe | nindent 10 }}
         readinessProbe:

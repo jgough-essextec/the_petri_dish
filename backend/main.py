@@ -42,9 +42,12 @@ app.add_middleware(
 )
 
 # Database setup
-DATABASE = "todos.db"
+DATABASE = os.getenv('DATABASE_PATH', '/app/data/todos.db')
 
 def init_db():
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(DATABASE), exist_ok=True)
+    
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
     

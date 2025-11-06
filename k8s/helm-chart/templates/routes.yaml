@@ -4,6 +4,10 @@ kind: Route
 metadata:
   name: {{ .Values.frontend.name }}-route
   namespace: {{ .Values.global.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+    haproxy.router.openshift.io/timeout: 120s
+    haproxy.router.openshift.io/balance: roundrobin
   labels:
     app.kubernetes.io/name: {{ .Values.frontend.name }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -34,6 +38,10 @@ kind: Route
 metadata:
   name: {{ .Values.backend.name }}-route
   namespace: {{ .Values.global.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+    haproxy.router.openshift.io/timeout: 120s
+    haproxy.router.openshift.io/balance: roundrobin
   labels:
     app.kubernetes.io/name: {{ .Values.backend.name }}
     app.kubernetes.io/instance: {{ .Release.Name }}

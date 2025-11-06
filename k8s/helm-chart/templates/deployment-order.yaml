@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: deployment-order
+  namespace: todo-app
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+data:
+  info: "This ConfigMap ensures proper deployment order for the todo app"
