@@ -9,6 +9,7 @@ services:
       - ./backend:/app
     environment:
       - PYTHONPATH=/app
+      - DATABASE_PATH=/app/todos.db
 
   frontend:
     build: ./frontend
@@ -17,7 +18,7 @@ services:
     depends_on:
       - backend
     environment:
-      - REACT_APP_API_URL=http://localhost:8000
+      - REACT_APP_API_URL=http://backend:8000
     volumes:
       - ./frontend:/app
       - /app/node_modules

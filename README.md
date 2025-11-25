@@ -45,6 +45,21 @@ The application will be available at:
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8000
 
+### Configuration
+
+The application can be configured using environment variables:
+
+#### Backend
+- `DATABASE_PATH`: SQLite database path (default: `backend/todos.db`)
+- `BACKEND_HOST`: Bind host (default: `0.0.0.0`)
+- `BACKEND_PORT`: Port (default: `8000`)
+
+#### Frontend
+- `REACT_APP_API_URL`: Backend API URL (default: `http://localhost:8000`)
+
+For local development, copy `.env.example` to `.env` and modify as needed.
+For Docker, variables are set in `docker-compose.yml`.
+
 ## API Endpoints
 
 ### Todos

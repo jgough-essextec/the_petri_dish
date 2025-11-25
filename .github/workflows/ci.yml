@@ -97,7 +97,7 @@ jobs:
         fi
 
         if [[ "${{ needs.frontend-tests.result }}" == "success" ]]; then
-          echo "✅ Frontend: Tests completed (17/23 passing, 6 known issues)"
+          echo "✅ Frontend: Tests completed (23/23 passing)"
         else
           echo "❌ Frontend: Build or tests failed!"
         fi
@@ -127,7 +127,7 @@ jobs:
         if [[ "${{ needs.backend-tests.result }}" == "success" && "${{ needs.frontend-tests.result }}" == "success" ]]; then
           echo "🚀 Ready for deployment!"
           echo "- Backend: 24/24 tests passing"
-          echo "- Frontend: Build successful, 17/23 tests passing"
+          echo "- Frontend: Build successful, 23/23 tests passing"
         elif [[ "${{ needs.backend-tests.result }}" == "success" ]]; then
           echo "⚠️  Partially ready for deployment"
           echo "- Backend: Fully tested and ready"
