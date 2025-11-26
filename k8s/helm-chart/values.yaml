@@ -7,9 +7,9 @@ global:
 backend:
   name: todo-backend
   image:
-    repository: image-registry.openshift-image-registry.svc:5000/todo-app/todo-backend
+    repository: jonathandgough/petri-dish-backend
     tag: latest
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   
   service:
     type: ClusterIP
@@ -62,9 +62,9 @@ backend:
 frontend:
   name: todo-frontend
   image:
-    repository: image-registry.openshift-image-registry.svc:5000/todo-app/todo-frontend
+    repository: jonathandgough/petri-dish-frontend
     tag: latest
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   
   service:
     type: ClusterIP
