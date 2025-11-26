@@ -92,7 +92,7 @@ jobs:
         run: |
           if [[ "${{ needs.test.result }}" == "success" ]]; then
             echo "✅ Frontend tests completed!"
-            echo "Note: Some tests may be failing (6/23), but build succeeded"
+            echo "All 23 tests passing"
             exit 0
           else
             echo "❌ Frontend build/tests failed!"

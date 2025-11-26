@@ -1,28 +1,4 @@
-import sys
-
-# Workaround: prefer importing the maintained `python_multipart` module and
-# register it under the legacy name `multipart` so Starlette's import of
-# `multipart` doesn't trigger a PendingDeprecationWarning coming from the
-# python-multipart package. This keeps CI/test output clean while upstream
-# libraries are updated.
-try:
-    import python_multipart as _python_multipart
-    # If the `multipart` name isn't already in sys.modules, point it to the
-    # python_multipart module so later `import multipart` returns the same
-    # module.
-    sys.modules.setdefault('multipart', _python_multipart)
-except Exception:
-    # If python_multipart isn't installed, we'll continue and let the normal
-    # import path run (which may emit a deprecation warning).
-    pass
-
-# Import FastAPI while suppressing the specific PendingDeprecationWarning that
-# can be emitted by Starlette/python-multipart during import. This keeps the
-# application import-time output quiet without changing third-party packages.
-import warnings
-with warnings.catch_warnings():
-    warnings.filterwarnings('ignore', category=PendingDeprecationWarning)
-    from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, ConfigDict, field_validator
 from typing import List, Optional
 import sqlite3
