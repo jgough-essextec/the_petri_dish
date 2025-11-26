@@ -3,6 +3,10 @@
 # Build stage
 FROM node:18-alpine AS builder
 
+# Accept API URL as build argument
+ARG REACT_APP_API_URL=http://localhost:8000
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
+
 WORKDIR /app
 
 # Copy package files
@@ -14,7 +18,7 @@ RUN npm ci --only=production
 # Copy source code
 COPY . .
 
-# Build the React app
+# Build the React app (API URL is baked in here)
 RUN npm run build
 
 # Production stage
